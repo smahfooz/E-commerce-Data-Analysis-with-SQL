@@ -14,20 +14,18 @@ By performing a series of complex queries on the dataset, the key findings are l
   <li>Listed top product categories sales in top 5 cities.</li>
   <li>Found commonly bought-together products.</li>
   <li>Evaluated seller performance in terms of order count, sales, and average ratings.</li>
-  
-The data source can be found here: https://www.kaggle.com/datasets/terencicp/e-commerce-dataset-by-olist-as-an-sqlite-database/data
+</ul>
+<p>The data source can be found here: https://www.kaggle.com/datasets/terencicp/e-commerce-dataset-by-olist-as-an-sqlite-database/data</p>  
 
-**Business Problem**
-The goal of this project was to analyze an e-commerce dataset to understand customer preferences, sales trends, and overall business performance. 
-By gaining insights into these areas, the business can optimize its marketing efforts, improve inventory management, enhance customer service, and ultimately increase revenue and customer retention.
+<h2><b>Business Problem</b></h2>
+<p>The goal of this project was to analyze an e-commerce dataset to understand customer preferences, sales trends, and overall business performance. 
+By gaining insights into these areas, the business can optimize its marketing efforts, improve inventory management, enhance customer service, and ultimately increase revenue and customer retention.</p>
 
-**Methodology**
-To achieve the business objectives, conducted a thorough analysis of the e-commerce dataset using SQLlite. The dataset comprised several tables, including orders, customers, products, payments, reviews, and geolocation information. 
-
-The following steps outline the methodology:
-
+<h2><b>Methodology</b></h2>
+<p>To achieve the business objectives, conducted a thorough analysis of the e-commerce dataset using SQLlite. The dataset comprised several tables, including orders, customers, products, payments, reviews, and geolocation information. </p>
+<p>The following steps outline the methodology:</p>
 <ol>
-  <li>**Understanding the Database Schema:**</li>
+  <li><h3>Understanding the Database Schema:</h3></li>
 Explored the database schema to comprehend the relationships between tables. This understanding was crucial for designing efficient queries and ensuring accurate data extraction.
 
   <li>**Query Design and Execution:**</li>
