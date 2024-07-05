@@ -3,6 +3,7 @@ Select
 	MIN(Date(order_purchase_timestamp)) as start_date,
     MAX(Date(order_purchase_timestamp)) as end_date
 FROM orders
+
 --The database has Orders from dates 04/09/2016 – 17/10/2018
 
 --checking the maximum and minimum order value not considering the shipping fees
@@ -44,7 +45,8 @@ ON o.order_id = op.order_id
 GROUP BY op.payment_installments
 ORDER BY 1 DESC;
 
---most of the customers opt for single payment however those are low payment value orders, modifying the above query to see if there is a relation between payment value and number of instalments
+--most of the customers opt for single payment however those are low payment value orders
+--modifying the above query to see if there is a relation between payment value and number of instalments
 
 SELECT
     COUNT(o.customer_id) AS Nb_Customers,
@@ -60,6 +62,7 @@ HAVING op.payment_installments>5
 ORDER BY 1 DESC;
 
 --Customers with higher payment value generally opt for higher number of payment instalments 
+
 
 --Average basket size
 SELECT AVG(item_counts) as Avg_Basket_Size
@@ -106,6 +109,7 @@ GROUP BY strftime('%Y', order_purchase_timestamp)
 --In fact there is a decrease in average basket price and size from 2016 to 2018, even though we have data only from September for the year 2016
 --This needs to be further investigated in Python
 
+
 -- Returning vs new customers
 SELECT 
 	COUNT(Case when customer_orders.tot_orders = 1 Then 1 END) AS "New Customer",
@@ -119,7 +123,6 @@ FROM
   ) AS customer_orders
 
 --Calculating in proportion
-
 With customer_orders AS
   (SELECT COUNT(o.order_id) as tot_orders
   From orders o
@@ -134,6 +137,7 @@ From customer_orders
 Group BY cust_type
 
 --Most of the customers are new (97%) so customer retention strategies need to be implemented also new customers need to engage more with the website to increase their possibility of coming back.
+
 
 --Customer Segmentation using Recency, Frequency and Monetary Values
 With RecencyScore AS (
@@ -167,6 +171,7 @@ MonetaryScore AS (
    Using (order_id)
    GROUP BY customer_unique_id
   ),
+--creating segments basis RFM score
 RFM as (
   SELECT
     CASE 
@@ -186,7 +191,7 @@ RFM as (
  Join MonetaryScore
   Using (customer_unique_id)
   )
-  
+--Grouping customer by RFM segments  
 Select RFM_bucket, COUNT(*)
  From RFM 
 GROUP BY RFM_bucket
@@ -221,6 +226,7 @@ Join order_items oi
 GROUP BY customer_city
 Order by 1 desc 
 
+
 --cities that contributed to 80% of revenue 
 
 --calculating total revenue generated
@@ -246,6 +252,7 @@ SELECT customer_city
           ) X
 Where Cumulative_Sum <=0.8 * Tot_Sales
 Order by 3 
+
 
 -- top 10 product category with most sales 
 SELECT ProductCategory, Rank, TotalSales
@@ -292,6 +299,7 @@ SELECT  customer_city,
 Where customer_city IN (SELECT customer_city FROm TopCities)
 Group by product_category_name_english
 
+
 --product most bought together in a single order 
 With product_ord as (
   Select order_id, product_id
@@ -306,6 +314,7 @@ Join product_ord p2
     	p1.product_id>p2.product_id
 GROUP BY 1,2
 Order by 3 DESC
+
 
 --sellers with most orders and their review score 
 SELECT seller_id,
