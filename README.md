@@ -1,5 +1,8 @@
-**Executive Summary**
-This project involved analyzing an extensive e-commerce dataset on Olist (Brazilian website) from Kaggle using SQL queries to uncover valuable insights into customer behavior, payment methods, product sales, and seller performance. 
+<h2><b>Executive Summary</b><h/2>
+<p>
+  This project involved analyzing an extensive e-commerce dataset on Olist (Brazilian website) from Kaggle using SQL queries to uncover valuable insights into customer behavior, payment methods, product sales, and seller performance. 
+</p>
+
 By performing a series of complex queries on the dataset, the key findings are listed below:
 <ul>
   <li>Identified the **most popular payment methods** and their average transaction values. </li>
