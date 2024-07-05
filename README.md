@@ -5,15 +5,15 @@
 
 By performing a series of complex queries on the dataset, the key findings are listed below:
 <ul>
-  <li>Identified the **most popular payment methods** and their average transaction values. </li>
-  <li>Analyzed installment** payment preferences** among customers.</li>
-  <li>Calculated the **average basket**.</li>
-  <li>Identified **new and returning customers** and calculated their respective proportions.</li>
-  <li>Conducted **RFM segmentation** to classify customers based on their purchasing behavior.</li>
-  <li>Determined the **cities contributing the most to revenue (80%) and sales volume**.</li>
-  <li>Listed top product categories sales in top 5 cities.</li>
-  <li>Found commonly bought-together products.</li>
-  <li>Evaluated seller performance in terms of order count, sales, and average ratings.</li>
+  <li>Identified the <b>most popular payment methods</b> and their average transaction values. </li>
+  <li>Analyzed installment <b>payment preferences</b> among customers.</li>
+  <li>Calculated the <b>average basket</b>.</li>
+  <li>Identified <b>new and returning customers</b> and calculated their respective proportions.</li>
+  <li>Conducted <b>RFM segmentation</b> to classify customers based on their purchasing behavior.</li>
+  <li>Determined the <b>cities contributing the most to revenue (80%) and sales volume</b>.</li>
+  <li>Listed <b>top product categories</b> sales in top 5 cities.</li>
+  <li>Found <b>commonly bought-together products</b>.</li>
+  <li>Evaluated <b>seller performance</b> in terms of order count, sales, and average ratings.</li>
 </ul>
 <p>The data source can be found here: https://www.kaggle.com/datasets/terencicp/e-commerce-dataset-by-olist-as-an-sqlite-database/data</p>  
 
@@ -28,10 +28,10 @@ By gaining insights into these areas, the business can optimize its marketing ef
   <li><h4>Understanding the Database Schema:</h4></li>
 Explored the database schema to comprehend the relationships between tables. This understanding was crucial for designing efficient queries and ensuring accurate data extraction.
 
-  <li>**Query Design and Execution:**</li>
+  <li><h4>Query Design and Execution:</h4></li>
 Designed and executed SQL queries to answer specific business questions. These queries involved:
     <ul>
-      <li>**Joins:** Combining data from multiple tables to get a comprehensive view of the dataset.</li>
+      <li><b>Joins</b>:** Combining data from multiple tables to get a comprehensive view of the dataset.</li>
       <li>**Aggregations:** Summarizing data to calculate metrics such as total sales, average basket size, and average payment value.</li>
       <li>**Subqueries and Common Table Expressions (CTEs):** Simplifying complex queries and improving readability.</li>
       <li>**Window Functions:** Performing calculations across a set of table rows related to the current row, useful for tasks like ranking and segmentation.</li>
