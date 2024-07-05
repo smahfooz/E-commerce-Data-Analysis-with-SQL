@@ -1,0 +1,326 @@
+--checking the range of order dates included in the database
+Select 
+	MIN(Date(order_purchase_timestamp)) as start_date,
+    MAX(Date(order_purchase_timestamp)) as end_date
+FROM orders
+--The database has Orders from dates 04/09/2016 – 17/10/2018
+
+--checking the maximum and minimum order value not considering the shipping fees
+SELECT 
+	MIN(order_value) as lowest_order_val,
+    ROUND(AVG(order_value),2) AS average_order_val,
+	MAX(order_value) AS highest_order_val
+FROM(
+    SELECT SUM(price) as order_value
+    FROM order_items
+    GROUP by order_id
+  )X
+--There seems to ve a huge variation in minimum and maximum value indicating the presence of outliers- the reason for which needs to be determined
+--this will be futher analyzed in python
+
+
+--most used payment method in % of customer and their average payment value
+SELECT
+	payment_type,
+    100 * COUNT (DISTINCT customer_id)/ (SELECT COUNT(*) FROM orders) as Percentage_of_Customers,
+    ROUND(AVG(payment_value),2) AS Average_Payment_Value    
+FROM orders o
+LEFT JOIN order_payments op
+	ON o.order_id = op.order_id
+WHERE payment_type is not NULL 
+GROUP by 1
+Order by 2 DESC;
+
+-- number of customers opting for instalments and how many instalments are they opting for 
+SELECT
+    COUNT(o.customer_id) AS Nb_Customers,
+    op.payment_installments,
+    Round(AVG(payment_value),2) as Avg_Payment_Value
+FROM
+    orders o
+LEFT JOIN
+    order_payments op
+ON o.order_id = op.order_id
+GROUP BY op.payment_installments
+ORDER BY 1 DESC;
+
+--most of the customers opt for single payment however those are low payment value orders, modifying the above query to see if there is a relation between payment value and number of instalments
+
+SELECT
+    COUNT(o.customer_id) AS Nb_Customers,
+    op.payment_installments,
+    Round(AVG(payment_value),2) as Avg_Payment_Value
+FROM
+    orders o
+LEFT JOIN
+    order_payments op
+ON o.order_id = op.order_id
+GROUP BY op.payment_installments
+HAVING op.payment_installments>5
+ORDER BY 1 DESC;
+
+--Customers with higher payment value generally opt for higher number of payment instalments 
+
+--Average basket size
+SELECT AVG(item_counts) as Avg_Basket_Size
+FROM
+	(SELECT o.order_id, Count(oi.order_id) as item_counts
+     From orders o
+     Join order_items oi
+     ON o.order_id = oi.order_id
+     GROUP BY o.order_id
+     ) AS order_count;
+
+--Average basket size per year
+SELECT strftime('%Y', order_purchase_timestamp) as Year, 
+	ROUND(1.0*Count(oi.order_id)/Count(DISTINCT o.order_id),2) As Average_basket_size
+From orders o
+Join order_items oi
+On o.order_id = oi.order_id
+GROUP by strftime('%Y', order_purchase_timestamp)
+Order by 1 
+--there has not been much of a change in the average basket size of customers over the years. Has there been a change in the order value?
+
+--Average basket price
+SELECT ROUND(AVG(order_value),2) as Avg_Basket_Price
+FROM
+	(SELECT o.order_id, SUM(oi.price) as order_value
+     From orders o
+     Join order_items oi
+     ON o.order_id = oi.order_id
+     GROUP BY o.order_id
+     ) AS order_val;
+
+--Average basket size per year
+SELECT strftime('%Y', order_purchase_timestamp) as Year, ROUND(AVG(tot_order_value),2) as Avg_Basket_Price
+FROM (
+  SELECT order_id, SUM(price) as tot_order_value
+  FROM order_items
+  GROUP by order_id
+  )X
+JOIN orders o
+USING (order_id)
+GROUP BY strftime('%Y', order_purchase_timestamp) 
+
+--The same goes for basket price as there is not much change over the years.
+--In fact there is a decrease in average basket price and size from 2016 to 2018, even though we have data only from September for the year 2016
+--This needs to be further investigated in Python
+
+-- Returning vs new customers
+SELECT 
+	COUNT(Case when customer_orders.tot_orders = 1 Then 1 END) AS "New Customer",
+	COUNt(Case when customer_orders.tot_orders >1 THen 1 END) AS "Returning Customer"
+FROM
+  (SELECT customer_unique_id, COUNT(o.order_id) as tot_orders
+  From orders o
+  Join customers c
+  ON o.customer_id = c.customer_id
+  GROUP BY customer_unique_id
+  ) AS customer_orders
+
+--Calculating in proportion
+
+With customer_orders AS
+  (SELECT COUNT(o.order_id) as tot_orders
+  From orders o
+  Join customers c
+  ON o.customer_id = c.customer_id
+  GROUP BY c.customer_unique_id
+) 
+SELECT 
+	Case when tot_orders > 1 Then 'Returning Customer' ELSE 'New Customer' END AS cust_type,
+	ROUND(100.0*COUNT(*) / (SELECT COUNT(*) from customer_orders),1) as Proportion
+From customer_orders
+Group BY cust_type
+
+--Most of the customers are new (97%) so customer retention strategies need to be implemented also new customers need to engage more with the website to increase their possibility of coming back.
+
+--Customer Segmentation using Recency, Frequency and Monetary Values
+With RecencyScore AS (
+	SELECT customer_unique_id,
+  		   MAX(Date(o.order_purchase_timestamp)) as recent_order,
+  		   NTILE(5) OVER(Order by MAX(Date(o.order_purchase_timestamp)) DESC) as Recency
+  	fROM customers c
+  	Join orders o
+  	USING (customer_id)
+  	WHERE order_status = 'delivered'
+  	GROUP BY c.customer_unique_id
+  ),
+FrequencyScore AS (
+  SELECT customer_unique_id,
+         COUNT(order_id) as Tot_Orders,
+  		 NTILE(5) OVER(Order BY COUNT(order_id) DESC) as Frequency
+  fROM customers c
+  Join orders o
+  USING (customer_id)
+  WHERE order_status = 'delivered'
+  GROUP BY c.customer_unique_id
+  ),
+MonetaryScore AS (
+   SELECT customer_unique_id,
+  		  SUM(price) AS tot_spent,
+   		  NTILE(5) OVER(Order BY SUM(price) DESC) as Monetary
+   FROM customers c
+   JOIN orders o 
+   Using(customer_id)
+   Join order_items oi
+   Using (order_id)
+   GROUP BY customer_unique_id
+  ),
+RFM as (
+  SELECT
+    CASE 
+      WHEN Recency =1 and Frequency + Monetary IN (2,3,4) THEN 'Champions'
+      WHEN Recency =1 AND Frequency + Monetary IN (5,6,7) THEN 'Recent User'
+      WHEN Recency in (1,2) AND Frequency + Monetary IN (8,9,10) THEN 'Price Sensitive'
+      WHEN Recency =2 AND Frequency + Monetary IN (6,7) THEN 'Need Attention'
+      WHEN Recency IN (2,3) AND Frequency + Monetary IN (2,3,4,5) THEN 'Loyal Customer'
+  	  WHEN Recency =3 AND Frequency + Monetary IN (6,7,8) THEN 'About to Sleep'
+  	  WHEN Recency =3 AND Frequency + Monetary IN (9,10) THEN 'Hibernating'
+  	  WHEN Recency IN (4,5) AND Frequency + Monetary IN (2,3,4,5) THEN 'Cant lose them'
+  	  WHEN Recency IN (4,5) AND Frequency + Monetary IN (6,7,8,9,10) THEN 'Lost'
+    END As RFM_Bucket
+ FROM RecencyScore
+ Join FrequencyScore
+  Using (customer_unique_id)
+ Join MonetaryScore
+  Using (customer_unique_id)
+  )
+  
+Select RFM_bucket, COUNT(*)
+ From RFM 
+GROUP BY RFM_bucket
+
+ 
+--city with most orders 
+SELECT Count(order_id), customer_city
+From customers c
+Join orders o
+Using (customer_id)
+GROUP BY customer_city
+Order by 1 DESC
+Limit 5
+
+--city with most revenue
+SELECT Round(SUM(price),2) as Total_Sales, customer_city
+FROM customers c
+Join orders o
+	Using (customer_id)
+Join order_items oi
+	Using (order_id)
+GROUP BY customer_city
+Order by 1 desc 
+
+--city with most volumne sold 
+SELECT Count(product_id) as Volume_Sold, customer_city
+FROM customers c
+Join orders o
+	Using (customer_id)
+Join order_items oi
+	Using (order_id)
+GROUP BY customer_city
+Order by 1 desc 
+
+--cities that contributed to 80% of revenue 
+
+--calculating total revenue generated
+With Tot_Revenue AS (
+	SELECT SUM(price) as Tot_Sales
+		From order_items
+  ),
+--calculating revenue generated by city
+  City_Revenue as (
+    SELECT Round(SUM(price),2) as City_Sales, customer_city
+      FROM customers c
+      Join orders o
+          Using (customer_id)
+      Join order_items oi
+          Using (order_id)
+      GROUP BY customer_city
+   )
+--finding cities contributing to 80% revenue through cumulative sum of sales
+SELECT customer_city
+	From (SELECT Tot_sales, customer_city,
+                 SUM(City_Sales) Over(Order BY City_Sales DESC) as Cumulative_Sum
+            From Tot_Revenue, City_Revenue
+          ) X
+Where Cumulative_Sum <=0.8 * Tot_Sales
+Order by 3 
+
+-- top 10 product category with most sales 
+SELECT ProductCategory, Rank, TotalSales
+	FROM(
+          SELECT
+              product_category_name_english as ProductCategory,
+              RANK() Over(Order BY SUM(price) DESC) AS Rank,
+              SUM(price) AS TotalSales
+          From products p
+          Join order_items oi
+              Using (product_id)
+          Join product_category_name_translation pt
+              Using (product_category_name)
+      Group by product_category_name_english
+      )X
+Where Rank <=10
+
+
+--product category with most sales in top 5 city
+With TopCities as (
+  SELECT customer_city
+  FROM customers c
+    Join orders o
+      Using (customer_id)
+    Join order_items oi
+      Using (order_id)
+  GROUP BY customer_city
+  Order by SUM(price) DESC
+  Limit 5
+ )
+SELECT  customer_city,
+		product_category_name_english as ProductCategory,
+		RANK() Over(PARTITION BY customer_city Order BY SUM(price) DESC) AS Rank,
+        Round(SUM(price),2) AS TotalSales
+	From products p
+    Join product_category_name_translation pt
+    	Using (product_category_name)
+    Join order_items oi
+    	Using (product_id)
+    Join orders o
+    	Using (order_id)
+    Join customers c
+    	Using (customer_id)
+Where customer_city IN (SELECT customer_city FROm TopCities)
+Group by product_category_name_english
+
+--product most bought together in a single order 
+With product_ord as (
+  Select order_id, product_id
+  From products p
+  Join order_items oi
+  	Using(product_id)
+  )
+SELECT p1.product_id, p2.product_id, COUNT(DISTINCT p1.order_id) as Nb_of_Orders
+from product_ord p1
+Join product_ord p2
+	ON p1.order_id=p2.order_id AND
+    	p1.product_id>p2.product_id
+GROUP BY 1,2
+Order by 3 DESC
+
+--sellers with most orders and their review score 
+SELECT seller_id,
+	Count(DISTINCT order_id) as tot_orders,
+    ROUND(SUM(price),2) as tot_sales,
+    ROUND(AVG(review_score),2) as average_rating
+From sellers s
+Join order_items oi
+	Using (seller_id)
+Join orders o
+	Using (order_id)
+Join order_reviews ors
+	Using (order_id)
+GROUP by seller_id
+Order by 3 DESC 
+
+
+
