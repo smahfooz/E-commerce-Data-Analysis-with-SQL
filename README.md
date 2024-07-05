@@ -25,7 +25,7 @@ By gaining insights into these areas, the business can optimize its marketing ef
 <p>To achieve the business objectives, conducted a thorough analysis of the e-commerce dataset using SQLlite. The dataset comprised several tables, including orders, customers, products, payments, reviews, and geolocation information. </p>
 <p>The following steps outline the methodology:</p>
 <ol>
-  <li><h3>Understanding the Database Schema:</h3></li>
+  <li><h4>Understanding the Database Schema:</h4></li>
 Explored the database schema to comprehend the relationships between tables. This understanding was crucial for designing efficient queries and ensuring accurate data extraction.
 
   <li>**Query Design and Execution:**</li>
