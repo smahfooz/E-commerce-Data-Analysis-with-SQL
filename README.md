@@ -7,7 +7,7 @@ By performing a series of complex queries on the dataset, the key findings are l
 <ul>
   <li>Identified the <b>most popular payment methods</b> and their average transaction values. </li>
   <li>Analyzed installment <b>payment preferences</b> among customers.</li>
-  <li>Calculated the <b>average basket</b>.</li>
+  <li>Calculated the <b>average basket size</b>.</li>
   <li>Identified <b>new and returning customers</b> and calculated their respective proportions.</li>
   <li>Conducted <b>RFM segmentation</b> to classify customers based on their purchasing behavior.</li>
   <li>Determined the <b>cities contributing the most to revenue (80%) and sales volume</b>.</li>
@@ -70,7 +70,7 @@ Evaluated sellers based on order count, total sales, and average review scores t
 Joins | Aggregation | Window Functions | Date Functions | Case When | CTEs and Subqueries | Over/Partition By
 
 <h2><b>Next Steps</b></h2>
-<ol>
+<ol type="1">
   <li>Build a PowerBI dashboard to visually demonstrate the key insights, allowing business stakeholders with a more intuitive interface to monitor business performance.</li>
-  <li>Perfroming in-depth analysis in Pyhton to gather insights on user purchasing behaviour such as hour of day and day of week with most sales, root cause analysis on lower review ratings</li>
+  <li>Perfroming in-depth analysis in Pyhton to gather insights on user purchasing behaviour such as hour of day and day of week with most sales, root cause analysis on lower review ratings.</li>
 </ol>
