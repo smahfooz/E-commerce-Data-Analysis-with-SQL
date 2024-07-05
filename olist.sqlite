@@ -16,8 +16,8 @@ FROM(
     FROM order_items
     GROUP by order_id
   )X
---There seems to ve a huge variation in minimum and maximum value indicating the presence of outliers- the reason for which needs to be determined
---this will be futher analyzed in python
+/*There seems to ve a huge variation in minimum and maximum value indicating the presence of outliers- the reason for which needs to be determined 
+this will be futher analyzed in python */
 
 
 --most used payment method in % of customer and their average payment value
@@ -45,8 +45,8 @@ ON o.order_id = op.order_id
 GROUP BY op.payment_installments
 ORDER BY 1 DESC;
 
---most of the customers opt for single payment however those are low payment value orders
---modifying the above query to see if there is a relation between payment value and number of instalments
+/*most of the customers opt for single payment however those are low payment value orders
+modifying the above query to see if there is a relation between payment value and number of instalments*/
 
 SELECT
     COUNT(o.customer_id) AS Nb_Customers,
@@ -82,7 +82,9 @@ Join order_items oi
 On o.order_id = oi.order_id
 GROUP by strftime('%Y', order_purchase_timestamp)
 Order by 1 
---there has not been much of a change in the average basket size of customers over the years. Has there been a change in the order value?
+
+*/there has not been much of a change in the average basket size of customers over the years. 
+Has there been a change in the order value? */
 
 --Average basket price
 SELECT ROUND(AVG(order_value),2) as Avg_Basket_Price
@@ -105,9 +107,9 @@ JOIN orders o
 USING (order_id)
 GROUP BY strftime('%Y', order_purchase_timestamp) 
 
---The same goes for basket price as there is not much change over the years.
---In fact there is a decrease in average basket price and size from 2016 to 2018, even though we have data only from September for the year 2016
---This needs to be further investigated in Python
+/*The same goes for basket price as there is not much change over the years.
+In fact there is a decrease in average basket price and size from 2016 to 2018, even though we have data only from September for the year 2016
+This needs to be further investigated in Python */
 
 
 -- Returning vs new customers
@@ -136,7 +138,8 @@ SELECT
 From customer_orders
 Group BY cust_type
 
---Most of the customers are new (97%) so customer retention strategies need to be implemented also new customers need to engage more with the website to increase their possibility of coming back.
+/*Most of the customers are new (97%) so customer retention strategies need to be implemented. 
+Also new customers need to engage more with the website to increase their possibility of coming back.*/
 
 
 --Customer Segmentation using Recency, Frequency and Monetary Values
