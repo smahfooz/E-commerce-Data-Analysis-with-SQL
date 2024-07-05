@@ -72,12 +72,12 @@ Joins | Aggregation | Window Functions | Date Functions | Case When | CTEs and S
 
 <h2><b>Key Findings</b></h2>
 <ul>
-  <li> 76% of total customers used Credit Card as preferred payment method </li>
-  <li>Single payment methods are the most common, especially for lower order values. Higher payment values are associated with more instalments</li>
-  <li>Average basket price and size have not changed significantly over the years, though there is a slight decrease from 2016-2018 (needs to be further investigated)</li>
-  <li>97* customers are new - need for customer retention and increase customer engagement strategies</li>
-  <li>Top 5 cities with most orders and revenue are: Sao Paulo, Rio de Janeiro, Belo Horizonte, Brasilia and Curitiba.
-  <li>Top product categories are: health and beauty, watches/gifts and bed/bath but this trend varies by each of the Top 5 cities</li>
+  <li> 76% of total customers used Credit Card as preferred payment method.</li>
+  <li>Single payment methods are the most common, especially for lower order values. Higher payment values are associated with more instalments.</li>
+  <li>Average basket price and size have not changed significantly over the years, though there is a slight decrease from 2016-2018 (needs to be further investigated).</li>
+  <li>97% customers are new - need for customer retention and increase customer engagement strategies.</li>
+  <li>Top 5 cities with most orders and revenue are: Sao Paulo, Rio de Janeiro, Belo Horizonte, Brasilia and Curitiba.</li>
+  <li>Top product categories are: health and beauty, watches/gifts and bed/bath but this trend varies by each of the Top 5 cities.</li>
 </ul>
 
 <h2><b>To be further investigated</b></h2>
