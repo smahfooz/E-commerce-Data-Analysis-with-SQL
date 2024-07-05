@@ -65,6 +65,7 @@ Identified products frequently bought together to inform product bundling strate
 
   <li><h4>Seller Performance Evaluation:</h4></li>
 Evaluated sellers based on order count, total sales, and average review scores to identify top-performing sellers and areas for improvement.
+</ol>
 
 <h2><b>SQL Concepts Demonstrated</b></h2>
 Joins | Aggregation | Window Functions | Date Functions | Case When | CTEs and Subqueries | Over/Partition By
