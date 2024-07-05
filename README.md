@@ -70,6 +70,21 @@ Evaluated sellers based on order count, total sales, and average review scores t
 <h2><b>SQL Concepts Demonstrated</b></h2>
 Joins | Aggregation | Window Functions | Date Functions | Case When | CTEs and Subqueries | Over/Partition By
 
+<h2><b>Key Findings</b></h2>
+<ul>
+  <li>The data distribution is skewed and there could be presence of outliers which needs to be further investigated</li>
+  <li> 76% of total customers used Credit Card as preferred payment method </li>
+  <li>Single payment methods are the most common, especially for lower order values. Higher payment values are associated with more instalments</li>
+  <li>Average basket price and size have not changed significantly over the years, though there is a slight decrease from 2016-2018 (needs to be further investigated)</li>
+  <li>97* customers are new - need for customer retention and increase customer engagement strategies</li>
+</ul>
+
+<h2><b>To be further investigated</b></h2>
+<ul>
+  <li>The data distribution is skewed and there could be presence of outliers.</li>
+  <li>Average basket price and size have not changed significantly over the years, but there is a slight decrease from 2016-2018 even though 2016 data is from September.
+</ul>
+
 <h2><b>Next Steps</b></h2>
 <ol type="1">
   <li>Build a PowerBI dashboard to visually demonstrate the key insights, allowing business stakeholders with a more intuitive interface to monitor business performance.</li>
