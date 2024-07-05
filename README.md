@@ -1,4 +1,4 @@
-<h2><b>Executive Summary</b><h/2>
+<h2><b>Executive Summary</b></h2>
 <p>
   This project involved analyzing an extensive e-commerce dataset on Olist (Brazilian website) from Kaggle using SQL queries to uncover valuable insights into customer behavior, payment methods, product sales, and seller performance. 
 </p>
